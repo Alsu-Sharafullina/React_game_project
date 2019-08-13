@@ -22,14 +22,17 @@ class App extends Component {
             shield_path : "/assets/img/shield.png",
             sword_path : "/assets/img/sword.png",
 
-            health_num : 0,
-            person_health : 0,
-            shield_num : 0,
-            person_shield : 0,
-            sword_num : 0,
-            person_sword : 0,
-            priceCount : 0,
-            person_price : 0,
+            initial_health_num : 0, //есть изначально
+            current_health_sum : 0, //меняется
+
+            initial_armor_num : 0, //есть изначально
+            current_armor_sum : 0, //меняется
+
+            initial_sword_num : 0, //есть изначально
+            current_sword_sum : 0, //меняется
+
+            initial_price : 0,
+            current_price_sum : 0,
 
             current_helmets_img : "",
             current_chests_img : "",
@@ -37,18 +40,11 @@ class App extends Component {
             current_boots_img : "",
             current_swords_img : "",
 
-            current_helmet : 0,
-            current_chest : 0,
-            current_glove : 0,
-            current_boot : 0,
-            current_sword : 0,
-            
-            current_health_sum : 0,
-            current_person_health_sum : 0,
-            current_armor_sum : 0,
-            current_person_armor_sum : 0,
-            current_attack_sum : 0,
-            current_person_attack_sum : 0,
+            current_helmet : null, //id выбранного шлема
+            current_chest : null, //id выбранной груди
+            current_glove : null, //id выбранной перчатки
+            current_boot : null, //id выбранного ботинка
+            current_sword : null, //id выбранного меча
 
         };
 
@@ -63,31 +59,81 @@ class App extends Component {
     onHelmetChangeSelect(event) {
         let id = event.target.value;
 
-        if (id == "null") {
-            let current_girl_img = this.state.person_img;
+        this.state.current_helmet = id;
+
+        let chest_health = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].health);
+        let glove_health = (this.state.current_glove == null) ? 0 : parseInt(this.state["gloves"][this.state.current_glove].health);
+        let boots_health = (this.state.current_boot == null) ? 0 : parseInt(this.state["boots"][this.state.current_boot].health);
+        let sword_health = (this.state.current_sword == null) ? 0 : parseInt(this.state["swords"][this.state.current_sword].health);
+
+        let chest_armor = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].armor);
+        let glove_armor = (this.state.current_glove == null) ? 0 : parseInt(this.state["gloves"][this.state.current_glove].armor);
+        let boots_armor = (this.state.current_boot == null) ? 0 : parseInt(this.state["boots"][this.state.current_boot].armor);
+        let sword_armor = (this.state.current_sword == null) ? 0 : parseInt(this.state["swords"][this.state.current_sword].armor);
+
+        let chest_sword = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].attack);
+        let glove_sword = (this.state.current_glove == null) ? 0 : parseInt(this.state["gloves"][this.state.current_glove].attack);
+        let boots_sword = (this.state.current_boot == null) ? 0 : parseInt(this.state["boots"][this.state.current_boot].attack);
+        let sword_sword = (this.state.current_sword == null) ? 0 : parseInt(this.state["swords"][this.state.current_sword].attack);
+
+
+        if (id === "none") {
+
+            let current_health_sum = parseInt(this.state.initial_health_num)
+                + chest_health
+                + glove_health
+                + boots_health
+                + sword_health;
+
+            let current_armor_sum = parseInt(this.state.initial_armor_num)
+                + chest_armor
+                + glove_armor
+                + boots_armor
+                + sword_armor;
+
+            let current_sword_sum = parseInt(this.state.initial_sword_num)
+                + chest_sword
+                + glove_sword
+                + boots_sword
+                + sword_sword;
+
+
 
             this.setState({
-                girl_img : current_girl_img,
-                person_health : +this.state.health_num,
-                person_shield : +this.state.shield_num,
-                person_sword : +this.state.sword_num,
-                person_price : this.state.priceCount,
+                current_helmets_img: null,
+                current_health_sum : current_health_sum,
+                current_armor_sum : current_armor_sum,
+                current_sword_sum : current_sword_sum,
             })
-        }
-        else {
-            let newHeartCount = +this.state.health_num + +(this.state["helmets"][id].health);
-            let newShieldCount = +this.state.shield_num + +(this.state["helmets"][id].armor);
-            let newSwordCount = +this.state.sword_num + +(this.state["helmets"][id].attack);
-            let price = this.state.priceCount + +(this.state["helmets"][id].price);
+        } else {
             let currentImg = this.state["helmets"][id].img;
 
+            let current_health_sum = parseInt(this.state.initial_health_num)
+                + parseInt(this.state["helmets"][id].health)
+                + chest_health
+                + glove_health
+                + boots_health
+                + sword_health;
+
+            let current_armor_sum = parseInt(this.state.initial_armor_num)
+                + parseInt(this.state["helmets"][id].armor)
+                + chest_armor
+                + glove_armor
+                + boots_armor
+                + sword_armor;
+
+            let current_sword_sum = parseInt(this.state.initial_sword_num)
+                + parseInt(this.state["helmets"][id].attack)
+                + chest_sword
+                + glove_sword
+                + boots_sword
+                + sword_sword;
 
             this.setState({
-                person_health : newHeartCount,
-                person_shield : newShieldCount,
-                person_sword : newSwordCount,
-                person_price : price,
                 current_helmets_img : currentImg,
+                current_health_sum : current_health_sum,
+                current_armor_sum : current_armor_sum,
+                current_sword_sum : current_sword_sum,
             });
         }
 
@@ -95,66 +141,319 @@ class App extends Component {
 
     onChestChangeSelect(event) {
         let id = event.target.value;
-        let newHeartCount = +this.state.health_num + +(this.state["chests"][id].health);
-        let newShieldCount = +this.state.shield_num + +(this.state["chests"][id].armor);
-        let newSwordCount = +this.state.sword_num + +(this.state["chests"][id].attack);
-        let price = this.state.priceCount + +(this.state["chests"][id].price);
-        let currentImg = this.state["chests"][id].img;
-        this.setState({
-            person_health : newHeartCount,
-            person_shield : newShieldCount,
-            person_sword : newSwordCount,
-            person_price : price,
-            current_chests_img : currentImg
-        });
+
+        this.state.current_chest = id;
+
+        let helmet_health = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].health);
+        //console.log(helmet_health);
+        let glove_health = (this.state.current_glove == null) ? 0 : parseInt(this.state["gloves"][this.state.current_glove].health);
+        let boots_health = (this.state.current_boot == null) ? 0 : parseInt(this.state["boots"][this.state.current_boot].health);
+        let sword_health = (this.state.current_sword == null) ? 0 : parseInt(this.state["swords"][this.state.current_sword].health);
+
+        let helmet_armor = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].armor);
+        let glove_armor = (this.state.current_glove == null) ? 0 : parseInt(this.state["gloves"][this.state.current_glove].armor);
+        let boots_armor = (this.state.current_boot == null) ? 0 : parseInt(this.state["boots"][this.state.current_boot].armor);
+        let sword_armor = (this.state.current_sword == null) ? 0 : parseInt(this.state["swords"][this.state.current_sword].armor);
+
+        let helmet_sword = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].attack);
+        let glove_sword = (this.state.current_glove == null) ? 0 : parseInt(this.state["gloves"][this.state.current_glove].attack);
+        let boots_sword = (this.state.current_boot == null) ? 0 : parseInt(this.state["boots"][this.state.current_boot].attack);
+        let sword_sword = (this.state.current_sword == null) ? 0 : parseInt(this.state["swords"][this.state.current_sword].attack);
+
+
+        if (id === "none") {
+            let current_health_sum = parseInt(this.state.initial_health_num)
+                + helmet_health
+                + glove_health
+                + boots_health
+                + sword_health;
+
+            let current_armor_sum = parseInt(this.state.initial_armor_num)
+                + helmet_armor
+                + glove_armor
+                + boots_armor
+                + sword_armor;
+
+            let current_sword_sum = parseInt(this.state.initial_sword_num)
+                + helmet_sword
+                + glove_sword
+                + boots_sword
+                + sword_sword;
+
+            this.setState({
+                current_chests_img: null,
+                current_health_sum : current_health_sum,
+                current_armor_sum : current_armor_sum,
+                current_sword_sum : current_sword_sum,
+            })
+        } else {
+            let currentImg = this.state["chests"][id].img;
+
+            let current_health_sum = parseInt(this.state.initial_health_num)
+                + parseInt(this.state["chests"][id].health)
+                + helmet_health
+                + glove_health
+                + boots_health
+                + sword_health;
+
+            let current_armor_sum = parseInt(this.state.initial_armor_num)
+                + parseInt(this.state["chests"][id].armor)
+                + helmet_armor
+                + glove_armor
+                + boots_armor
+                + sword_armor;
+
+            let current_sword_sum = parseInt(this.state.initial_sword_num)
+                + parseInt(this.state["chests"][id].attack)
+                + helmet_sword
+                + glove_sword
+                + boots_sword
+                + sword_sword;
+
+            this.setState({
+                current_chests_img : currentImg,
+                current_health_sum : current_health_sum,
+                current_armor_sum : current_armor_sum,
+                current_sword_sum : current_sword_sum,
+            });
+        }
     }
 
     onGlovesChangeSelect(event) {
         let id = event.target.value;
-        let newHeartCount = +this.state.health_num + +(this.state["gloves"][id].health);
-        let newShieldCount = +this.state.shield_num + +(this.state["gloves"][id].armor);
-        let newSwordCount = +this.state.sword_num + +(this.state["gloves"][id].attack);
-        let price = this.state.priceCount + +(this.state["gloves"][id].price);
-        let currentImg = this.state["gloves"][id].img;
-        this.setState({
-            person_health : newHeartCount,
-            person_shield : newShieldCount,
-            person_sword : newSwordCount,
-            person_price : price,
-            current_gloves_img : currentImg
-        });
+
+        this.state.current_glove = id;
+
+        let helmet_health = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].health);
+        let chest_health = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].health);
+        let boots_health = (this.state.current_boot == null) ? 0 : parseInt(this.state["boots"][this.state.current_boot].health);
+        let sword_health = (this.state.current_sword == null) ? 0 : parseInt(this.state["swords"][this.state.current_sword].health);
+
+        let helmet_armor = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].armor);
+        let chest_armor = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].armor);
+        let boots_armor = (this.state.current_boot == null) ? 0 : parseInt(this.state["boots"][this.state.current_boot].armor);
+        let sword_armor = (this.state.current_sword == null) ? 0 : parseInt(this.state["swords"][this.state.current_sword].armor);
+
+        let helmet_sword = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].attack);
+        let chest_sword = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].attack);
+        let boots_sword = (this.state.current_boot == null) ? 0 : parseInt(this.state["boots"][this.state.current_boot].attack);
+        let sword_sword = (this.state.current_sword == null) ? 0 : parseInt(this.state["swords"][this.state.current_sword].attack);
+
+
+        if (id === "none") {
+            let current_health_sum = parseInt(this.state.initial_health_num)
+                + helmet_health
+                + chest_health
+                + boots_health
+                + sword_health;
+
+            let current_armor_sum = parseInt(this.state.initial_armor_num)
+                + helmet_armor
+                + chest_armor
+                + boots_armor
+                + sword_armor;
+
+            let current_sword_sum = parseInt(this.state.initial_sword_num)
+                + helmet_sword
+                + chest_sword
+                + boots_sword
+                + sword_sword;
+
+            this.setState({
+                current_gloves_img: null,
+                current_health_sum : current_health_sum,
+                current_armor_sum : current_armor_sum,
+                current_sword_sum : current_sword_sum,
+            })
+        } else {
+            let currentImg = this.state["gloves"][id].img;
+
+            let current_health_sum = parseInt(this.state.initial_health_num)
+                + parseInt(this.state["gloves"][id].health)
+                + helmet_health
+                + chest_health
+                + boots_health
+                + sword_health;
+
+            let current_armor_sum = parseInt(this.state.initial_armor_num)
+                + parseInt(this.state["gloves"][id].armor)
+                + helmet_armor
+                + chest_armor
+                + boots_armor
+                + sword_armor;
+
+            let current_sword_sum = parseInt(this.state.initial_sword_num)
+                + parseInt(this.state["gloves"][id].attack)
+                + helmet_sword
+                + chest_sword
+                + boots_sword
+                + sword_sword;
+
+            this.setState({
+                current_gloves_img : currentImg,
+                current_health_sum : current_health_sum,
+                current_armor_sum : current_armor_sum,
+                current_sword_sum : current_sword_sum,
+            });
+        }
     }
 
     onBootsChangeSelect(event) {
         let id = event.target.value;
-        let newHeartCount = +this.state.health_num + +(this.state["boots"][id].health);
-        let newShieldCount = +this.state.shield_num + +(this.state["boots"][id].armor);
-        let newSwordCount = +this.state.sword_num + +(this.state["boots"][id].attack);
-        let price = this.state.priceCount + +(this.state["boots"][id].price);
-        let currentImg = this.state["boots"][id].img;
-        this.setState({
-            person_health : newHeartCount,
-            person_shield : newShieldCount,
-            person_sword : newSwordCount,
-            person_price : price,
-            current_boots_img : currentImg
-        });
+
+        this.state.current_boots = id;
+
+        let helmet_health = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].health);
+        let chest_health = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].health);
+        let glove_health = (this.state.current_glove == null) ? 0 : parseInt(this.state["gloves"][this.state.current_glove].health);
+        let sword_health = (this.state.current_sword == null) ? 0 : parseInt(this.state["swords"][this.state.current_sword].health);
+
+        let helmet_armor = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].armor);
+        let chest_armor = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].armor);
+        let glove_armor = (this.state.current_glove == null) ? 0 : parseInt(this.state["gloves"][this.state.current_glove].armor);
+        let sword_armor = (this.state.current_sword == null) ? 0 : parseInt(this.state["swords"][this.state.current_sword].armor);
+
+        let helmet_sword = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].attack);
+        let chest_sword = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].attack);
+        let glove_sword = (this.state.current_glove == null) ? 0 : parseInt(this.state["gloves"][this.state.current_glove].attack);
+        let sword_sword = (this.state.current_sword == null) ? 0 : parseInt(this.state["swords"][this.state.current_sword].attack);
+
+
+        if (id === "none") {
+            let current_health_sum = parseInt(this.state.initial_health_num) +
+                + helmet_health
+                + chest_health
+                + glove_health
+                + sword_health;
+
+            let current_armor_sum = parseInt(this.state.initial_armor_num) +
+                + helmet_armor
+                + chest_armor
+                + glove_armor
+                + sword_armor;
+
+            let current_sword_sum = parseInt(this.state.initial_sword_num) +
+                + helmet_sword
+                + chest_sword
+                + glove_sword
+                + sword_sword;
+
+            this.setState({
+                current_boots_img: null,
+                current_health_sum : current_health_sum,
+                current_armor_sum : current_armor_sum,
+                current_sword_sum : current_sword_sum,
+            })
+        } else {
+            let currentImg = this.state["boots"][id].img;
+
+            let current_health_sum = parseInt(this.state.initial_health_num) +
+                + parseInt(this.state["boots"][id].health)
+                + helmet_health
+                + chest_health
+                + glove_health
+                + sword_health;
+
+            let current_armor_sum = parseInt(this.state.initial_armor_num) +
+                + parseInt(this.state["boots"][id].armor)
+                + helmet_armor
+                + chest_armor
+                + glove_armor
+                + sword_armor;
+
+            let current_sword_sum = parseInt(this.state.initial_sword_num) +
+                + parseInt(this.state["boots"][id].attack)
+                + helmet_sword
+                + chest_sword
+                + glove_sword
+                + sword_sword;
+
+            this.setState({
+                current_boots_img : currentImg,
+                current_health_sum : current_health_sum,
+                current_armor_sum : current_armor_sum,
+                current_sword_sum : current_sword_sum,
+            });
+        }
     }
 
     onSwordsChangeSelect(event) {
         let id = event.target.value;
-        let newHeartCount = +this.state.health_num + +(this.state["swords"][id].health);
-        let newShieldCount = +this.state.shield_num + +(this.state["swords"][id].armor);
-        let newSwordCount = +this.state.sword_num + +(this.state["swords"][id].attack);
-        let price = this.state.priceCount + +(this.state["swords"][id].price);
-        let currentImg = this.state["swords"][id].img;
-        this.setState({
-            person_health : newHeartCount,
-            person_shield : newShieldCount,
-            person_sword : newSwordCount,
-            person_price : price,
-            current_swords_img : currentImg
-        });
+
+        this.state.current_sword = id;
+
+        let helmet_health = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].health);
+        let chest_health = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].health);
+        let glove_health = (this.state.current_glove == null) ? 0 : parseInt(this.state["gloves"][this.state.current_glove].health);
+        let boot_health = (this.state.current_boot == null) ? 0 : parseInt(this.state["boots"][this.state.current_boot].health);
+
+        let helmet_armor = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].armor);
+        let chest_armor = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].armor);
+        let glove_armor = (this.state.current_glove == null) ? 0 : parseInt(this.state["gloves"][this.state.current_glove].armor);
+        let boot_armor = (this.state.current_boot == null) ? 0 : parseInt(this.state["boots"][this.state.current_boot].armor);
+
+        let helmet_sword = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].attack);
+        let chest_sword = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].attack);
+        let glove_sword = (this.state.current_glove == null) ? 0 : parseInt(this.state["gloves"][this.state.current_glove].attack);
+        let boot_sword = (this.state.current_boot == null) ? 0 : parseInt(this.state["boots"][this.state.current_boot].attack);
+
+
+        if (id === "none") {
+            let current_health_sum = parseInt(this.state.initial_health_num) +
+                + helmet_health
+                + chest_health
+                + glove_health
+                + boot_health;
+
+            let current_armor_sum = parseInt(this.state.initial_armor_num) +
+                + helmet_armor
+                + chest_armor
+                + glove_armor
+                + boot_armor;
+
+            let current_sword_sum = parseInt(this.state.initial_sword_num) +
+                + helmet_sword
+                + chest_sword
+                + glove_sword
+                + boot_sword;
+
+            this.setState({
+                current_swords_img: null,
+                current_health_sum : current_health_sum,
+                current_armor_sum : current_armor_sum,
+                current_sword_sum : current_sword_sum,
+            })
+        } else {
+            let currentImg = this.state["swords"][id].img;
+
+            let current_health_sum = parseInt(this.state.initial_health_num) +
+                + parseInt(this.state["swords"][id].health)
+                + helmet_health
+                + chest_health
+                + glove_health
+                + boot_health;
+
+            let current_armor_sum = parseInt(this.state.initial_armor_num) +
+                + parseInt(this.state["swords"][id].armor)
+                + helmet_armor
+                + chest_armor
+                + glove_armor
+                + boot_armor;
+
+            let current_sword_sum = parseInt(this.state.initial_sword_num) +
+                + parseInt(this.state["swords"][id].attack)
+                + helmet_sword
+                + chest_sword
+                + glove_sword
+                + boot_sword;
+
+            this.setState({
+                current_swords_img : currentImg,
+                current_health_sum : current_health_sum,
+                current_armor_sum : current_armor_sum,
+                current_sword_sum : current_sword_sum,
+            });
+        }
     }
 
 
@@ -174,14 +473,15 @@ class App extends Component {
                     swords : commits[0].equipment.swords,
                     person_img : commits[0].person.img,
                     girl_name : commits[0].person.name,
-                    health_num : commits[0].person.health,
-                    shield_num : commits[0].person.armor,
-                    sword_num : commits[0].person.attack,
-                    priceCount : 0,
-                    person_price : 0,
-                    person_health : commits[0].person.health,
-                    person_shield : commits[0].person.armor,
-                    person_sword : commits[0].person.attack,
+
+                    initial_price : 0,
+                    current_price_sum : 0,
+                    initial_health_num : commits[0].person.health,
+                    current_health_sum : commits[0].person.health,
+                    initial_armor_num : commits[0].person.armor,
+                    current_armor_sum : commits[0].person.armor,
+                    initial_sword_num : commits[0].person.attack,
+                    current_sword_sum : commits[0].person.attack,
                 }, function () {
 
                 });
@@ -200,7 +500,7 @@ class App extends Component {
                             <div className="equipments__title">Helmet</div>
                             <div className="forms">
                                 <select className="form-control" data-info="helmets" onChange={this.onHelmetChangeSelect}>
-                                    <option value="null">Выберите элемент</option>
+                                    <option value="none">Выберите элемент</option>
                                     {this.state.helmets.map((item, index) =>
                                         <option key={index} value={item.id}>{item.name}</option>
                                     )}
@@ -212,7 +512,7 @@ class App extends Component {
                             <div className="equipments__title">Chest</div>
                             <div className="forms">
                                 <select className="form-control" data-info="chests" onChange={this.onChestChangeSelect}>
-                                    <option value="null">Выберите элемент</option>
+                                    <option value="none">Выберите элемент</option>
                                     {this.state.chests.map((item, index) =>
                                         <option key={index} value={item.id}>{item.name}</option>
                                     )}
@@ -224,7 +524,7 @@ class App extends Component {
                             <div className="equipments__title">Gloves</div>
                             <div className="forms">
                                 <select className="form-control" data-info="gloves" onChange={this.onGlovesChangeSelect}>
-                                    <option value="null">Выберите элемент</option>
+                                    <option value="none">Выберите элемент</option>
                                     {this.state.gloves.map((item, index) =>
                                         <option key={index} value={item.id}>{item.name}</option>
                                     )}
@@ -236,7 +536,7 @@ class App extends Component {
                             <div className="equipments__title">Boots</div>
                             <div className="forms">
                                 <select className="form-control" data-info="boots" onChange={this.onBootsChangeSelect}>
-                                    <option value="null">Выберите элемент</option>
+                                    <option value="none">Выберите элемент</option>
                                     {this.state.boots.map((item, index) =>
                                         <option key={index} value={item.id}>{item.name}</option>
                                     )}
@@ -248,7 +548,7 @@ class App extends Component {
                             <div className="equipments__title">Sword</div>
                             <div className="forms">
                                 <select className="form-control" data-info="swords" onChange={this.onSwordsChangeSelect}>
-                                    <option value="null">Выберите элемент</option>
+                                    <option value="none">Выберите элемент</option>
                                     {this.state.swords.map((item, index) =>
                                         <option key={index} value={item.id}>{item.name}</option>
                                     )}
@@ -257,7 +557,7 @@ class App extends Component {
                         </div>
                     </div>
 
-                    <div className="cost">Equipment cost: {this.state.person_price}</div>
+                    <div className="cost">Equipment cost: {this.state.current_price_sum}</div>
 
                 </div>
                 <div className="rectangle2">
@@ -277,17 +577,17 @@ class App extends Component {
                         <div className="stats">
                             <div className="statsMain">
                                 <span className="stats__num">Stats: </span>
-                                <span>{this.state.person_health}</span>
+                                <span>{this.state.current_health_sum}</span>
                                 <img className="heart__img" src={this.state.heart_path} alt=""/>
                             </div>
 
                             <div className="shieldMain">
-                                <span className="shield_num">{this.state.person_shield}</span>
+                                <span className="shield_num">{this.state.current_armor_sum}</span>
                                 <img className="shield__img" src={this.state.shield_path} alt=""/>
                             </div>
 
                             <div className="swordMain">
-                                <span className="sword_num">{this.state.person_sword}</span>
+                                <span className="sword_num">{this.state.current_sword_sum}</span>
                                 <img className="sword__img" src={this.state.sword_path} alt=""/>
                             </div>
 
