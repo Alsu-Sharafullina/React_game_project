@@ -9,36 +9,33 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            helmets : [],
-            gloves : [],
-            chests : [],
-            boots : [],
-            swords : [],
+            helmets : [], // массив шлемов
+            gloves : [], // массив перчаток
+            chests : [], // массив "грудей"
+            boots : [], // массив ботинок
+            swords : [], // массив мечей
 
-            person_img : "",
-            girl_name : "",
+            heart_path : "/assets/img/heart.png", //путь к картинке "сердце"
+            shield_path : "/assets/img/shield.png", //путь к картинке "щит"
+            sword_path : "/assets/img/sword.png", //путь к картинке "меч"
 
-            heart_path : "/assets/img/heart.png",
-            shield_path : "/assets/img/shield.png",
-            sword_path : "/assets/img/sword.png",
+            initial_health_num : 0, // изначально указанное кол-во жизни
+            current_health_sum : 0, // изменяемое кол-во жизни
 
-            initial_health_num : 0, //есть изначально
-            current_health_sum : 0, //меняется
+            initial_armor_num : 0, // изначально указанное кол-во щитов
+            current_armor_sum : 0, // изменяемое кол-во щитов
 
-            initial_armor_num : 0, //есть изначально
-            current_armor_sum : 0, //меняется
+            initial_sword_num : 0, // изначально указанное кол-во мечей
+            current_sword_sum : 0, // изменяемое кол-во мечей
 
-            initial_sword_num : 0, //есть изначально
-            current_sword_sum : 0, //меняется
+            initial_price_num : 0, // изначальная цена
+            current_price_sum : 0, // изменяемая цена
 
-            initial_price_num : 0,
-            current_price_sum : 0,
-
-            current_helmets_img : "",
-            current_chests_img : "",
-            current_gloves_img : "",
-            current_boots_img : "",
-            current_swords_img : "",
+            current_helmets_img : "", // текущая картинка шлема(по цвету)
+            current_chests_img : "", // текущая картинка груди (по цвету)
+            current_gloves_img : "", // текущая картинка перчаток (по цвету)
+            current_boots_img : "", // текущая картинка ботинок (по цвету)
+            current_swords_img : "", // текущая картинка меча (по цвету)
 
             current_helmet : null, //id выбранного шлема
             current_chest : null, //id выбранной груди
@@ -53,9 +50,15 @@ class App extends Component {
         this.onGlovesChangeSelect = this.onGlovesChangeSelect.bind(this);
         this.onBootsChangeSelect = this.onBootsChangeSelect.bind(this);
         this.onSwordsChangeSelect = this.onSwordsChangeSelect.bind(this);
-        this.myAction = this.myAction.bind(this);
+        /*this.myAction = this.myAction.bind(this);*/
     }
 
+
+   /* myAction(arg1){
+
+        let a = "изменения";
+        return a;
+    }*/
 
     onHelmetChangeSelect(event) {
         let id = event.target.value;
@@ -92,7 +95,7 @@ class App extends Component {
 
         } else {
             helmet_price = parseInt(this.state["helmets"][id].price);
-
+            console.log(helmet_price);
             helmet_health = parseInt(this.state["helmets"][id].health);
             helmet_armor = parseInt(this.state["helmets"][id].armor);
             helmet_attack = parseInt(this.state["helmets"][id].attack);
@@ -171,7 +174,6 @@ class App extends Component {
         } else {
             chest_price = parseInt(this.state["chests"][id].price);
             console.log(chest_price);
-
             chest_health = parseInt(this.state["chests"][id].health);
             chest_armor = parseInt(this.state["chests"][id].armor);
             chest_attack = parseInt(this.state["chests"][id].attack);
@@ -206,6 +208,8 @@ class App extends Component {
             + boots_attack
             + sword_attack;
 
+        /*debugger*/
+
         this.setState({
             current_price_sum : current_price_sum,
             current_chests_img : currentImg,
@@ -216,11 +220,6 @@ class App extends Component {
 
     }
 
-    myAction(arg1){
-
-        let a = "изменения";
-        return a;
-    }
 
     onGlovesChangeSelect(event) {
         let id = event.target.value;
@@ -255,6 +254,7 @@ class App extends Component {
             currentImg = null;
         } else {
             glove_price = parseInt(this.state["gloves"][id].price);
+            console.log(glove_price);
             glove_health = parseInt(this.state["gloves"][id].health);
             glove_armor = parseInt(this.state["gloves"][id].armor);
             glove_attack = parseInt(this.state["gloves"][id].attack);
@@ -301,7 +301,7 @@ class App extends Component {
     onBootsChangeSelect(event) {
         let id = event.target.value;
 
-        this.state.current_boots = (id == "none") ? null : id;
+        this.state.current_boot = (id == "none") ? null : id;
 
         let helmet_price = (this.state.current_helmet == null) ? 0 : parseInt(this.state["helmets"][this.state.current_helmet].price);
         let chest_price = (this.state.current_chest == null) ? 0 : parseInt(this.state["chests"][this.state.current_chest].price);
@@ -331,6 +331,7 @@ class App extends Component {
             currentImg = null;
         } else {
             boot_price = parseInt(this.state["boots"][id].price);
+            console.log(boot_price);
             boot_health = parseInt(this.state["boots"][id].health);
             boot_armor = parseInt(this.state["boots"][id].armor);
             boot_attack = parseInt(this.state["boots"][id].attack);
@@ -407,6 +408,7 @@ class App extends Component {
             currentImg = null;
         } else {
             sword_price = parseInt(this.state["swords"][id].price);
+            console.log(sword_price);
             sword_health = parseInt(this.state["swords"][id].health);
             sword_armor = parseInt(this.state["swords"][id].armor);
             sword_attack = parseInt(this.state["swords"][id].attack);
@@ -467,6 +469,7 @@ class App extends Component {
 
                     initial_price : 0,
                     current_price_sum : 0,
+
                     initial_health_num : commits[0].person.health,
                     current_health_sum : commits[0].person.health,
                     initial_armor_num : commits[0].person.armor,
