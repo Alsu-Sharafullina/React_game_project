@@ -1,0 +1,37 @@
+import React, { Component } from "react";
+
+class Equipment extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            items: []
+        }
+        this.onEquipmentChangeSelect = this.onEquipmentChangeSelect.bind(this);
+    }
+
+    onEquipmentChangeSelect(event) {
+        this.props.onChange(event);
+    }
+
+        render() {
+
+        {
+            return (
+                <div className="equipments__item">
+                    <div className="equipments__title">{this.props.title}</div>
+                    <div className="forms">
+                        <select className="form-control" data-arr={this.props.helmets} data-info={this.props.arrname} onChange={this.onEquipmentChangeSelect}>
+                            <option value="none">{this.props.choose}</option>
+                        {this.props.items.map((item, index) =>
+                            <option key={index} value={item.id}>{item.name}</option>
+                        )}
+                        </select>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+}
+
+export default Equipment;

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+//import fetchJsonp from 'fetch-jsonp';
+
+import Equipment from "./Equipment.jsx";
 
 import '../assets/css/App.css';
-
 
 
 class App extends Component {
@@ -17,6 +19,7 @@ class App extends Component {
 
             heart_path : "/assets/img/heart.png", //путь к картинке "сердце"
             shield_path : "/assets/img/shield.png", //путь к картинке "щит"
+            shield2_path : "/assets/img/subtract.png", //путь к картинке "щит"
             sword_path : "/assets/img/sword.png", //путь к картинке "меч"
 
             initial_health_num : 0, // изначально указанное кол-во жизни
@@ -49,7 +52,6 @@ class App extends Component {
 
     }
 
-
     onChangeSelect(event) {
         let id = event.target.value;
         let data = event.target.getAttribute('data-info');
@@ -69,6 +71,7 @@ class App extends Component {
 
 
         if (id != "none") {
+
             currentImg = this.state[data][id].img;
             current_selected_item_price = parseInt(this.state[data][id].price);
             current_selected_item_health = parseInt(this.state[data][id].health);
@@ -151,102 +154,65 @@ class App extends Component {
         });
     }
 
-    componentDidMount(){
+    componentDidMount() {
 
-        fetch('dist/datalb.json')
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        const url = "http://test.datalb.ru/test.json"; // site that doesnt send Access-Control-*
+
+        fetch(proxyurl + url) // https://cors-anywhere.herokuapp.com/http://test.datalb.ru/test.json
             .then(response => response.json())
-            .then(commits => {
+            .then(json => json)
+            .then(json => {
                 this.setState({
-                    helmets : commits[0].equipment.helmets,
-                    gloves : commits[0].equipment.gloves,
-                    chests : commits[0].equipment.chests,
-                    boots : commits[0].equipment.boots,
-                    swords : commits[0].equipment.swords,
-                    person_img : commits[0].person.img,
-                    girl_name : commits[0].person.name,
+                    helmets : json.equipment.helmets,
+                    gloves : json.equipment.gloves,
+                    chests : json.equipment.chests,
+                    boots : json.equipment.boots,
+                    swords : json.equipment.swords,
+                    person_img : json.person.img,
+                    person_alt_img : json.person['alt-img'],
+                    girl_name : json.person.name,
 
                     initial_price : 0,
                     current_price_sum : 0,
 
-                    initial_health_num : commits[0].person.health,
-                    current_health_sum : commits[0].person.health,
-                    initial_armor_num : commits[0].person.armor,
-                    current_armor_sum : commits[0].person.armor,
-                    initial_sword_num : commits[0].person.attack,
-                    current_sword_sum : commits[0].person.attack,
+                    initial_health_num : json.person.health,
+                    current_health_sum : json.person.health,
+                    initial_armor_num : json.person.armor,
+                    current_armor_sum : json.person.armor,
+                    initial_sword_num : json.person.attack,
+                    current_sword_sum : json.person.attack,
                 }, function () {
-
+                    //console.log();
                 });
 
-            });
+            })
+            .catch(() => console.log("Cant access " + url + " response. Blocked by browser?"));
     }
 
-
     render() {
+
         return (
             <div className="main">
                 <div className="rectangle1">
                     <div className="rectangle__title">Shop</div>
                     <div className="equipments">
-                        <div className="equipments__item">
-                            <div className="equipments__title">Helmet</div>
-                            <div className="forms">
-                                <select className="form-control" data-info="helmets" onChange={this.onChangeSelect}>
-                                    <option value="none">Выберите элемент</option>
-                                    {this.state.helmets.map((item, index) =>
-                                        <option key={index} value={item.id}>{item.name}</option>
-                                    )}
-                                </select>
-                            </div>
-                        </div>
 
-                        <div className="equipments__item">
-                            <div className="equipments__title">Chest</div>
-                            <div className="forms">
-                                <select className="form-control" data-info="chests" onChange={this.onChangeSelect}>
-                                    <option value="none">Выберите элемент</option>
-                                    {this.state.chests.map((item, index) =>
-                                        <option key={index} value={item.id}>{item.name}</option>
-                                    )}
-                                </select>
-                            </div>
-                        </div>
+                        <Equipment items={this.state.helmets} title={"Helmet"} choose={"Выберите элемент"} arrname={"helmets"}
+                                   onChange={this.onChangeSelect}/>
 
-                        <div className="equipments__item">
-                            <div className="equipments__title">Gloves</div>
-                            <div className="forms">
-                                <select className="form-control" data-info="gloves" onChange={this.onChangeSelect}>
-                                    <option value="none">Выберите элемент</option>
-                                    {this.state.gloves.map((item, index) =>
-                                        <option key={index} value={item.id}>{item.name}</option>
-                                    )}
-                                </select>
-                            </div>
-                        </div>
+                        <Equipment items={this.state.chests} title={"Chest"} choose={"Выберите элемент"} arrname={"chests"}
+                                   onChange={this.onChangeSelect}/>
 
-                        <div className="equipments__item">
-                            <div className="equipments__title">Boots</div>
-                            <div className="forms">
-                                <select className="form-control" data-info="boots" onChange={this.onChangeSelect}>
-                                    <option value="none">Выберите элемент</option>
-                                    {this.state.boots.map((item, index) =>
-                                        <option key={index} value={item.id}>{item.name}</option>
-                                    )}
-                                </select>
-                            </div>
-                        </div>
+                        <Equipment items={this.state.gloves} title={"Gloves"} choose={"Выберите элемент"} arrname={"gloves"}
+                                   onChange={this.onChangeSelect}/>
 
-                        <div className="equipments__item">
-                            <div className="equipments__title">Sword</div>
-                            <div className="forms">
-                                <select className="form-control" data-info="swords" onChange={this.onChangeSelect}>
-                                    <option value="none">Выберите элемент</option>
-                                    {this.state.swords.map((item, index) =>
-                                        <option key={index} value={item.id}>{item.name}</option>
-                                    )}
-                                </select>
-                            </div>
-                        </div>
+                        <Equipment items={this.state.boots} title={"Boots"} choose={"Выберите элемент"} arrname={"boots"}
+                                   onChange={this.onChangeSelect}/>
+
+                        <Equipment items={this.state.swords} title={"Sword"} choose={"Выберите элемент"} arrname={"swords"}
+                                   onChange={this.onChangeSelect}/>
+
                     </div>
 
                     <div className="cost">Equipment cost: {this.state.current_price_sum}</div>
@@ -259,7 +225,7 @@ class App extends Component {
                         <img className="gloves__img" src={this.state.current_gloves_img} alt=""/>
                         <img className="boots__img" src={this.state.current_boots_img} alt=""/>
                         <img className="swords__img" src={this.state.current_swords_img} alt=""/>
-                        <img className="girl_img" src={this.state.person_img} alt=""/>
+                        <img className="girl_img" src={this.state.person_img} alt={this.state.person_alt_img}/>
                     </div>
 
                     <div className="personProps">
@@ -276,6 +242,7 @@ class App extends Component {
                             <div className="shieldMain">
                                 <span className="shield_num">{this.state.current_armor_sum}</span>
                                 <img className="shield__img" src={this.state.shield_path} alt=""/>
+                                <img className="shield2__img" src={this.state.shield2_path} alt=""/>
                             </div>
 
                             <div className="swordMain">
