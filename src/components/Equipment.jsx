@@ -5,20 +5,19 @@ class Equipment extends Component {
         super(props);
         this.state = {
             items: []
-        }
+        };
         this.onEquipmentChangeSelect = this.onEquipmentChangeSelect.bind(this);
     }
 
     onEquipmentChangeSelect(event) {
-        this.props.onChange(event);
+        this.props.ChangeSelect(event);
     }
 
         render() {
-
         {
             return (
                 <div className="equipments__item">
-                    <div className="equipments__title">{this.props.title}</div>
+                    <div style={{fontSize: "14px", textAlign: "center"}}>{this.props.title}</div>
                     <div className="forms">
                         <select className="form-control" data-arr={this.props.helmets} data-info={this.props.arrname} onChange={this.onEquipmentChangeSelect}>
                             <option value="none">{this.props.choose}</option>
@@ -31,7 +30,6 @@ class Equipment extends Component {
             )
         }
     }
-
 }
 
 export default Equipment;

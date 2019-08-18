@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-//import fetchJsonp from 'fetch-jsonp';
 
 import Equipment from "./Equipment.jsx";
 
 import '../assets/css/App.css';
-
 
 class App extends Component {
 
@@ -40,21 +38,22 @@ class App extends Component {
             current_boots_img : "", // текущая картинка ботинок (по цвету)
             current_swords_img : "", // текущая картинка меча (по цвету)
 
-            current_helmets : null, //id выбранного шлема
+            current_helmets : "none", //id выбранного шлема
             current_chests : null, //id выбранной груди
             current_glove : null, //id выбранной перчатки
             current_boot : null, //id выбранного ботинка
             current_sword : null, //id выбранного меча
-
+            helmetsEnabled : ""
         };
 
         this.onChangeSelect = this.onChangeSelect.bind(this);
 
     }
 
+
     onChangeSelect(event) {
-        let id = event.target.value;
-        let data = event.target.getAttribute('data-info');
+        const id = event.target.value;
+        const data = event.target.getAttribute('data-info');
 
         let currentImg;
         let current_price_sum = parseInt(this.state.initial_price_num);
@@ -62,13 +61,11 @@ class App extends Component {
         let current_armor_sum = parseInt(this.state.initial_armor_num);
         let current_sword_sum = parseInt(this.state.initial_sword_num);
 
-
-        let arr = ["helmets", "chests", "gloves", "boots", "swords"];
+        const arr = ["helmets", "chests", "gloves", "boots", "swords"];
         let current_selected_item_price = 0;
         let current_selected_item_health = 0;
         let current_selected_item_armor = 0;
         let current_selected_item_sword = 0;
-
 
         if (id != "none") {
 
@@ -93,9 +90,9 @@ class App extends Component {
                 let myPriceString = "";
                 myPriceString = [i];
 
-                let minidata = this.state[myPriceString];
-                let mystring = "current_" + i;
-                let cur_id = this.state[mystring];
+                const minidata = this.state[myPriceString];
+                const mystring = "current_" + i;
+                const cur_id = this.state[mystring];
 
                 let price;
                 let health;
@@ -121,7 +118,8 @@ class App extends Component {
             }
         }
 
-        let state_object = {
+
+        const state_object = {
 
         };
 
@@ -149,9 +147,14 @@ class App extends Component {
         mySwordString = "current_sword_sum";
         state_object[mySwordString] = current_sword_sum;
 
+
         this.setState(state_object, function () {
 
+                this.setState({
+                    helmetsEnabled : (this.state.current_helmets != "none") ? true : false
+                });
         });
+
     }
 
     componentDidMount() {
@@ -183,7 +186,7 @@ class App extends Component {
                     initial_sword_num : json.person.attack,
                     current_sword_sum : json.person.attack,
                 }, function () {
-                    //console.log();
+
                 });
 
             })
@@ -199,60 +202,60 @@ class App extends Component {
                     <div className="equipments">
 
                         <Equipment items={this.state.helmets} title={"Helmet"} choose={"Выберите элемент"} arrname={"helmets"}
-                                   onChange={this.onChangeSelect}/>
+                                   ChangeSelect={this.onChangeSelect}/>
 
                         <Equipment items={this.state.chests} title={"Chest"} choose={"Выберите элемент"} arrname={"chests"}
-                                   onChange={this.onChangeSelect}/>
+                                   ChangeSelect={this.onChangeSelect}/>
 
                         <Equipment items={this.state.gloves} title={"Gloves"} choose={"Выберите элемент"} arrname={"gloves"}
-                                   onChange={this.onChangeSelect}/>
+                                   ChangeSelect={this.onChangeSelect}/>
 
                         <Equipment items={this.state.boots} title={"Boots"} choose={"Выберите элемент"} arrname={"boots"}
-                                   onChange={this.onChangeSelect}/>
+                                   ChangeSelect={this.onChangeSelect}/>
 
                         <Equipment items={this.state.swords} title={"Sword"} choose={"Выберите элемент"} arrname={"swords"}
-                                   onChange={this.onChangeSelect}/>
+                                   ChangeSelect={this.onChangeSelect}/>
 
                     </div>
 
-                    <div className="cost">Equipment cost: {this.state.current_price_sum}</div>
+                    <div style={{ margin: "50px 45px 0", fontSize: "14px", color: "#000000"}}>Equipment cost: {this.state.current_price_sum}</div>
 
                 </div>
-                <div className="rectangle2">
-                    <div className="rectangle__img">
-                        <img className="helmet__img" src={this.state.current_helmets_img} alt=""/>
-                        <img className="chest__img" src={this.state.current_chests_img} alt=""/>
+                <div className="rectangle2" style={{marginRight: "0"}}>
+                    <div className="rectangle__img" style={{position: "relative"}}>
+                        {(this.state.helmetsEnabled) ? <div className="hire__disabled "></div> : null}
+                        <img className="helmets__img" src={this.state.current_helmets_img} alt=""/>
+                        <img className="chests__img" src={this.state.current_chests_img} alt=""/>
                         <img className="gloves__img" src={this.state.current_gloves_img} alt=""/>
                         <img className="boots__img" src={this.state.current_boots_img} alt=""/>
                         <img className="swords__img" src={this.state.current_swords_img} alt=""/>
-                        <img className="girl_img" src={this.state.person_img} alt={this.state.person_alt_img}/>
+                        <img className="person__img" src={this.state.person_img} alt={this.state.person_alt_img}/>
                     </div>
 
-                    <div className="personProps">
-                         <div className="personName">
-                            <span className="name">Name: </span>{this.state.girl_name}
+                    <div className="person__info" style={{margin: "36px 0 0 80px"}}>
+                         <div className="person__name" style={{marginBottom: "20px"}}>
+                            <span style={{marginRight: "39px"}}>Name: </span>{this.state.girl_name}
                         </div>
                         <div className="stats">
-                            <div className="statsMain">
-                                <span className="stats__num">Stats: </span>
+                            <div className="healthMain">
+                                <span style={{marginRight: "44px"}}>Stats: </span>
                                 <span>{this.state.current_health_sum}</span>
-                                <img className="heart__img" src={this.state.heart_path} alt=""/>
+                                <img style={{marginLeft: "26px"}} src={this.state.heart_path} alt=""/>
                             </div>
 
                             <div className="shieldMain">
-                                <span className="shield_num">{this.state.current_armor_sum}</span>
-                                <img className="shield__img" src={this.state.shield_path} alt=""/>
-                                <img className="shield2__img" src={this.state.shield2_path} alt=""/>
+                                <span style={{marginTop: "10px", marginLeft: "83px"}}>{this.state.current_armor_sum}</span>
+                                <img style={{marginTop: "10px", marginLeft: "34px"}} src={this.state.shield_path} alt=""/>
+                                <img style={{marginLeft: "-8px"}} src={this.state.shield2_path} alt=""/>
                             </div>
 
                             <div className="swordMain">
-                                <span className="sword_num">{this.state.current_sword_sum}</span>
-                                <img className="sword__img" src={this.state.sword_path} alt=""/>
+                                <span style={{marginTop: "10px", marginLeft: "83px"}}>{this.state.current_sword_sum}</span>
+                                <img style={{marginTop: "10px", marginLeft: "34px"}} src={this.state.sword_path} alt=""/>
                             </div>
 
                         </div>
                     </div>
-
                 </div>
             </div>
         );

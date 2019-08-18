@@ -48,10 +48,6 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 4px;
 }
 
-.rectangle2 {
-    margin-right: 0;
-}
-
 .rectangle__title {
     padding-top: 27px;
     margin-bottom: 38px;
@@ -63,44 +59,6 @@ h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
 
     color: #000;
-
-}
-
-.rectangle__img {
-    position: relative;
-}
-
-.helmet__img {
-    position: absolute;
-    left: 130px;
-}
-
-.chest__img {
-    position: absolute;
-    left: 137px;
-    top: 86px;
-}
-
-.gloves__img {
-    position: absolute;
-    left: 85px;
-    top: 155px;
-}
-
-.boots__img {
-    position: absolute;
-    left: 120px;
-    top: 250px;
-}
-
-.swords__img {
-    position: absolute;
-    top: 190px;
-}
-
-.girl_img {
-    display: block;
-    margin: 41px auto 0;
 }
 
 .equipments__item {
@@ -108,11 +66,6 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.equipments__title {
-    font-size: 14px;
-    text-align: center;
 }
 
 .form-control {
@@ -137,48 +90,52 @@ h1, h2, h3, h4, h5, h6 {
     width: 280px;
     height: 0;
     margin: 10px 45px;
-
-
     border: 1px solid #727272;
 }
 
-.cost {
-    margin: 50px 45px 0;;
-    font-size: 14px;
+/* Rectanle Image */
 
-    color: #000000;
+.helmets__img {
+    position: absolute;
+    top: 7px;
+    left: 133px;
+    z-index: 1000;
+}
+.chests__img {
+    position: absolute;
+    top: 86px;
+    left: 137px;
 }
 
-.personProps {
-    margin: 36px 0 0 80px;
+.gloves__img {
+    position: absolute;
+    top: 155px;
+    left: 85px;
 }
 
-.personName {
-    margin-bottom: 20px;
+.boots__img {
+    position: absolute;
+    top: 250px;
+    left: 120px;
 }
 
-.name {
-    margin-right: 39px;
+.swords__img {
+    position: absolute;
+    top: 190px;
 }
 
-.stats__num {
-    margin-right: 44px;
+.person__img {
+    display: block;
+    margin: 41px auto 0;
 }
 
-.heart__img {
-    margin-left: 26px;
+.hire__disabled {
+    width: 75px;
+    height: 54px;
+    background-color: #F9E88E;
+    position: absolute;
+    left: 133px;
+    top: -4px;
+    z-index: 1;
 }
 
-.shield_num, .sword_num {
-    margin-top: 10px;
-    margin-left: 83px;
-}
-
-.shield__img, .sword__img {
-    margin-top: 10px;
-    margin-left: 34px;
-}
-
-.shield2__img{
-    margin-left: -8px;
-}
