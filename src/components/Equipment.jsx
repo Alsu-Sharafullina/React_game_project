@@ -19,7 +19,7 @@ class Equipment extends Component {
                 <div className="equipments__item">
                     <div style={{fontSize: "14px", textAlign: "center"}}>{this.props.title}</div>
                     <div className="forms">
-                        <select className="form-control" data-arr={this.props.helmets} data-info={this.props.arrname}
+                        <select className="form-control" data-arr={this.props.items} data-info={this.props.arrname}
                                 onChange={this.onEquipmentChangeSelect}>
                             <option value="none">{this.props.choose}</option>
                         {this.props.items.map((item, index) =>
