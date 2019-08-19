@@ -23,7 +23,7 @@ class Equipment extends Component {
                                 onChange={this.onEquipmentChangeSelect}>
                             <option value="none">{this.props.choose}</option>
                         {this.props.items.map((item, index) =>
-                            <option key={index} value={item.id}>{item.name}</option>
+                            <option key={index} value={index}>{item.name}</option>
                         )}
                         </select>
                     </div>

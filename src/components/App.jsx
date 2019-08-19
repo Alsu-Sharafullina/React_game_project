@@ -160,7 +160,7 @@ class App extends Component {
     componentDidMount() {
 
         const proxyurl = "https://cors-anywhere.herokuapp.com/";
-        const url = "http://test.datalb.ru/test.json"; // site that doesnt send Access-Control-*
+        const url = "http://test.datalb.ru/test.json"; // site that doesnt send Access-Control
 
         fetch(proxyurl + url) // https://cors-anywhere.herokuapp.com/http://test.datalb.ru/test.json
             .then(response => response.json())
