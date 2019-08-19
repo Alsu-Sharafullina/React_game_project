@@ -223,7 +223,7 @@ class App extends Component {
                 </div>
                 <div className="rectangle2" style={{marginRight: "0"}}>
                     <div className="rectangle__img" style={{position: "relative"}}>
-                        {(this.state.helmetsEnabled) ? <div className="hire__disabled "></div> : null}
+                        {(this.state.helmetsEnabled) ? <div className="hair__disabled "></div> : null}
                         <img className="helmets__img" src={this.state.current_helmets_img} alt=""/>
                         <img className="chests__img" src={this.state.current_chests_img} alt=""/>
                         <img className="gloves__img" src={this.state.current_gloves_img} alt=""/>
